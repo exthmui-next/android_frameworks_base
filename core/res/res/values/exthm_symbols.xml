@@ -7,6 +7,7 @@
     <!-- Camera -->
     <java-symbol type="array" name="config_cameraAuxPackageAllowList" />
     <java-symbol type="array" name="config_cameraAuxPackageExcludeList" />
+    <java-symbol type="array" name="config_cameraHFRPrivAppList" />
 
     <!-- Should we listen for fingerprints when the screen is off?  Devices
          with a rear-mounted sensor want this, but certain devices have
