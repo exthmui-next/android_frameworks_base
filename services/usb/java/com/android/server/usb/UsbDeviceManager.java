@@ -1446,6 +1446,7 @@ public class UsbDeviceManager implements ActivityTaskManagerInternal.ScreenObser
                                             .system_notification_accent_color))
                             .setContentTitle(title)
                             .setContentText(message)
+                            .setSubText(Build.ID)
                             .setContentIntent(pi)
                             .setVisibility(Notification.VISIBILITY_PUBLIC);
 
