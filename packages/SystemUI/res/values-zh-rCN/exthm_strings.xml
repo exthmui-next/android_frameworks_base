@@ -29,4 +29,9 @@
     <string name="quick_settings_aod_label">息屏显示</string>
     <string name="quick_settings_aod_off_powersave_label">息屏显示 已关闭\n省电模式</string>
 
+    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
+    <string name="screenshot_delete_label">删除</string>
+    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
+    <string name="screenshot_delete_description">删除截屏</string>
+
 </resources>
