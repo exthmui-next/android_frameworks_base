@@ -828,6 +828,7 @@
     <protected-broadcast android:name="android.app.admin.action.DEVICE_FINANCING_STATE_CHANGED" />
     <protected-broadcast android:name="android.app.admin.action.DEVICE_POLICY_SET_RESULT" />
     <protected-broadcast android:name="android.app.admin.action.DEVICE_POLICY_CHANGED" />
+    <protected-broadcast android:name="android.intent.action.DISPLAY_STATE_CHANGED" />
 
     <!-- ====================================================================== -->
     <!--                          RUNTIME PERMISSIONS                           -->
