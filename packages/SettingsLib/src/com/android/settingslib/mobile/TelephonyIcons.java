@@ -152,6 +152,18 @@ public class TelephonyIcons {
             TelephonyIcons.ICON_5G_PLUS
     );
 
+    public static final MobileIconGroup NR_NSA = new MobileIconGroup(
+            "5G_NSA",
+            R.string.data_connection_5g_nsa,
+            TelephonyIcons.ICON_5G_NSA
+    );
+
+    public static final MobileIconGroup NR_SA = new MobileIconGroup(
+            "5G_SA",
+            R.string.data_connection_5g_sa,
+            TelephonyIcons.ICON_5G
+    );
+
     public static final MobileIconGroup DATA_DISABLED = new MobileIconGroup(
             "DataDisabled",
             R.string.cell_data_off_content_description,
