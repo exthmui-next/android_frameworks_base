@@ -142,6 +142,11 @@ public class InternetDialog extends SystemUIDialog implements
     private int mDefaultDataSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
     private boolean mCanConfigMobileData;
     private boolean mCanChangeWifiState;
+    private LinearLayout mFivegLayout;
+    private ImageView mFivegIcon;
+    private TextView mFivegTitleText;
+    private View mFivegToggleDivider;
+    private Switch mFivegToggle;
 
     // Wi-Fi entries
     private int mWifiNetworkHeight;
@@ -163,6 +168,9 @@ public class InternetDialog extends SystemUIDialog implements
         mIsSearchingHidden = true;
         mInternetDialogSubTitle.setText(getSubtitleText());
     };
+
+    // 5g toggle
+    private final boolean mShouldShowFivegToggle;
 
     @Inject
     public InternetDialog(Context context, InternetDialogFactory internetDialogFactory,
@@ -189,6 +197,7 @@ public class InternetDialog extends SystemUIDialog implements
         mCanConfigWifi = canConfigWifi;
         mCanChangeWifiState = WifiEnterpriseRestrictionUtils.isChangeWifiStateAllowed(context);
         mKeyguard = keyguardStateController;
+        mShouldShowFivegToggle = mInternetDialogController.isFivegSupported();
 
         mUiEventLogger = uiEventLogger;
         mDialogLaunchAnimator = dialogLaunchAnimator;
@@ -244,6 +253,11 @@ public class InternetDialog extends SystemUIDialog implements
         mMobileToggleDivider = mDialogView.requireViewById(R.id.mobile_toggle_divider);
         mMobileDataToggle = mDialogView.requireViewById(R.id.mobile_toggle);
         mWiFiToggle = mDialogView.requireViewById(R.id.wifi_toggle);
+        mFivegLayout = mDialogView.requireViewById(R.id.fiveg_layout);
+        mFivegIcon = mDialogView.requireViewById(R.id.fiveg_icon);
+        mFivegTitleText = mDialogView.requireViewById(R.id.fiveg_title);
+        mFivegToggleDivider = mDialogView.requireViewById(R.id.fiveg_toggle_divider);
+        mFivegToggle = mDialogView.requireViewById(R.id.fiveg_toggle);
         mBackgroundOn = mContext.getDrawable(R.drawable.settingslib_switch_bar_bg_on);
         mInternetDialogTitle.setText(getDialogTitleText());
         mInternetDialogTitle.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
@@ -292,6 +306,7 @@ public class InternetDialog extends SystemUIDialog implements
         mWiFiToggle.setOnCheckedChangeListener(null);
         mDoneButton.setOnClickListener(null);
         mAirplaneModeButton.setOnClickListener(null);
+        mFivegToggle.setOnCheckedChangeListener(null);
         mInternetDialogController.onStop();
         mInternetDialogFactory.destroyDialog();
     }
@@ -358,6 +373,8 @@ public class InternetDialog extends SystemUIDialog implements
                         isChecked, false);
             }
         });
+        mFivegToggle.setOnCheckedChangeListener(
+            (buttonView, isChecked) -> mInternetDialogController.setFivegEnabled(isChecked));
         mConnectedWifListLayout.setOnClickListener(this::onClickConnectedWifi);
         mSeeAllLayout.setOnClickListener(this::onClickSeeMoreButton);
         mWiFiToggle.setOnCheckedChangeListener(
@@ -396,7 +413,9 @@ public class InternetDialog extends SystemUIDialog implements
             }
         } else {
             mMobileNetworkLayout.setVisibility(View.VISIBLE);
+            mFivegLayout.setVisibility(mShouldShowFivegToggle ? View.VISIBLE : View.GONE);
             mMobileDataToggle.setChecked(mInternetDialogController.isMobileDataEnabled());
+            mFivegToggle.setChecked(mInternetDialogController.isFivegEnabled());
             mMobileTitleText.setText(getMobileNetworkTitle(mDefaultDataSubId));
             String summary = getMobileNetworkSummary(mDefaultDataSubId);
             if (!TextUtils.isEmpty(summary)) {
@@ -413,9 +432,17 @@ public class InternetDialog extends SystemUIDialog implements
                     mSignalIcon.setImageDrawable(drawable);
                 });
             });
+            mFivegIcon.setColorFilter(
+                        mContext.getColor(R.color.connected_network_primary_color));
+            mFivegTitleText.setTextAppearance(isNetworkConnected
+                    ? R.style.TextAppearance_InternetDialog_Active
+                    : R.style.TextAppearance_InternetDialog);
 
             mMobileDataToggle.setVisibility(mCanConfigMobileData ? View.VISIBLE : View.INVISIBLE);
+            mFivegToggle.setVisibility(mCanConfigMobileData ? View.VISIBLE : View.INVISIBLE);
             mMobileToggleDivider.setVisibility(
+                    mCanConfigMobileData ? View.VISIBLE : View.INVISIBLE);
+            mFivegToggleDivider.setVisibility(
                     mCanConfigMobileData ? View.VISIBLE : View.INVISIBLE);
 
             // Display the info for the non-DDS if it's actively being used
