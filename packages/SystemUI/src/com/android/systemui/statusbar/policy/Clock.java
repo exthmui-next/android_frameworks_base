@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.TypedArray;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.icu.text.DateTimePatternGenerator;
 import android.os.Bundle;
@@ -394,7 +395,9 @@ public class Clock extends TextView implements
                         R.dimen.status_bar_clock_end_padding),
                 0);
 
-        float fontHeight = getPaint().getFontMetricsInt(null);
+        Paint.FontMetrics metrics = getPaint().getFontMetrics();
+        float fontHeight = (metrics.descent + Math.abs(metrics.ascent) + 
+                    metrics.leading + metrics.bottom);
         setLineHeight(TypedValue.COMPLEX_UNIT_PX, fontHeight);
 
         ViewGroup.LayoutParams lp = getLayoutParams();
