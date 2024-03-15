@@ -57,6 +57,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.internal.logging.UiEvent;
 import com.android.internal.logging.UiEventLogger;
+import com.android.settingslib.Utils;
 import com.android.settingslib.wifi.WifiEnterpriseRestrictionUtils;
 import com.android.systemui.Prefs;
 import com.android.systemui.R;
@@ -432,8 +433,9 @@ public class InternetDialog extends SystemUIDialog implements
                     mSignalIcon.setImageDrawable(drawable);
                 });
             });
-            mFivegIcon.setColorFilter(
-                        mContext.getColor(R.color.connected_network_primary_color));
+            mFivegIcon.getDrawable().setTint(isNetworkConnected
+                ? mContext.getColor(R.color.connected_network_primary_color)
+                : Utils.getColorAttrDefaultColor(mContext, android.R.attr.textColorTertiary));
             mFivegTitleText.setTextAppearance(isNetworkConnected
                     ? R.style.TextAppearance_InternetDialog_Active
                     : R.style.TextAppearance_InternetDialog);
