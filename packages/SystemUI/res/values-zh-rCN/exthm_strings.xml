@@ -22,4 +22,11 @@
     <!-- 5G toggle in internet dialog -->
     <string name="enable_fiveg">启用 5G</string>
 
+    <!-- USB tethering QS tile -->
+    <string name="quick_settings_usb_tether_label">USB网络共享</string>
+
+    <!-- AOD QS tile -->
+    <string name="quick_settings_aod_label">息屏显示</string>
+    <string name="quick_settings_aod_off_powersave_label">息屏显示 已关闭\n省电模式</string>
+
 </resources>
