@@ -22,4 +22,7 @@
     <!-- 5G toggle in internet dialog -->
     <string name="enable_fiveg">Enable 5G</string>
 
+    <!-- USB tethering QS tile -->
+    <string name="quick_settings_usb_tether_label">USB tethering</string>
+
 </resources>
