@@ -17,6 +17,7 @@
 package com.android.systemui.exthm
 
 import com.android.systemui.qs.tileimpl.QSTileImpl
+import com.android.systemui.qs.tiles.AODTile
 import com.android.systemui.qs.tiles.UsbTetherTile
 
 import dagger.Binds
@@ -31,4 +32,10 @@ interface ExthmQsModule {
     @IntoMap
     @StringKey(UsbTetherTile.TILE_SPEC)
     fun bindUsbTetherTile(usbTetherTile: UsbTetherTile): QSTileImpl<*>
+
+    /** Inject AODTile into tileMap in QSModule */
+    @Binds
+    @IntoMap
+    @StringKey(AODTile.TILE_SPEC)
+    fun bindAODTile(aodTile: AODTile): QSTileImpl<*>
 }
