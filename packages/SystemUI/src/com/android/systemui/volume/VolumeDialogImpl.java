@@ -478,8 +478,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         final int[] locInWindow = new int[2];
         view.getLocationInWindow(locInWindow);
 
-        float x = locInWindow[0];
-        float y = locInWindow[1];
+        float xExtraSize = 0;
+        float yExtraSize = 0;
 
         // The ringer and rows container has extra height at the top to fit the expanded ringer
         // drawer. This area should not be touchable unless the ringer drawer is open.
@@ -490,23 +490,23 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         if (view == mTopContainer) {
             if (!isLandscape()) {
                 if (!mIsRingerDrawerOpen) {
-                    y += getRingerDrawerOpenExtraSize();
+                    yExtraSize = getRingerDrawerOpenExtraSize();
                 }
                 if (!mExpanded) {
-                    x += getExpandableRowsExtraSize();
+                    xExtraSize = getExpandableRowsExtraSize();
                 }
             } else {
                 if (!mIsRingerDrawerOpen && !mExpanded) {
-                    x +=
+                    xExtraSize =
                             Math.max(getRingerDrawerOpenExtraSize(), getExpandableRowsExtraSize());
                 } else if (!mIsRingerDrawerOpen) {
                     if (getRingerDrawerOpenExtraSize() > getVisibleRowsExtraSize()) {
-                        x += getRingerDrawerOpenExtraSize() - getVisibleRowsExtraSize();
+                        xExtraSize = getRingerDrawerOpenExtraSize() - getVisibleRowsExtraSize();
                     }
                 } else if (!mExpanded) {
                     if ((getVisibleRowsExtraSize() + getExpandableRowsExtraSize())
                             > getRingerDrawerOpenExtraSize()) {
-                        x += (getVisibleRowsExtraSize() + getExpandableRowsExtraSize())
+                        xExtraSize = (getVisibleRowsExtraSize() + getExpandableRowsExtraSize())
                                 - getRingerDrawerOpenExtraSize();
                     }
                 }
@@ -514,8 +514,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         }
 
         mTouchableRegion.op(
-                (int) x,
-                (int) y,
+                locInWindow[0] + (int) xExtraSize,
+                locInWindow[1] + (int) yExtraSize,
                 locInWindow[0] + view.getWidth(),
                 locInWindow[1] + view.getHeight(),
                 Region.Op.UNION);
@@ -1293,17 +1293,16 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     }
 
     private void initSettingsH(int lockTaskModeState) {
+        final boolean showSettings = mDeviceProvisionedController.isCurrentUserSetup()
+                && lockTaskModeState == LOCK_TASK_MODE_NONE;
         if (mRoundedBorderBottom != null) {
-            mRoundedBorderBottom.setVisibility(!mDeviceProvisionedController.isCurrentUserSetup() ||
-                    mActivityManager.getLockTaskModeState() != LOCK_TASK_MODE_NONE
-                    ? VISIBLE : GONE);
+            mRoundedBorderBottom.setVisibility(!showSettings ? VISIBLE : GONE);
         }
         if (mSettingsView != null) {
             mSettingsView.setVisibility(
-                    mDeviceProvisionedController.isCurrentUserSetup() &&
-                            lockTaskModeState == LOCK_TASK_MODE_NONE 
-                            && isBluetoothA2dpConnected()
-                            ? VISIBLE : GONE);
+                    showSettings && (isMediaControllerAvailable() || isBluetoothA2dpConnected())
+                            ? VISIBLE
+                            : GONE);
         }
         if (mSettingsIcon != null) {
             mSettingsIcon.setOnClickListener(v -> {
@@ -1317,9 +1316,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         }
 
         if (mExpandRowsView != null) {
-            mExpandRowsView.setVisibility(mDeviceProvisionedController.isCurrentUserSetup()
-                    && mActivityManager.getLockTaskModeState() == LOCK_TASK_MODE_NONE
-                    ? VISIBLE : GONE);
+            mExpandRowsView.setVisibility(showSettings ? VISIBLE : GONE);
         }
         if (mExpandRows != null) {
             mExpandRows.setOnClickListener(v -> {
