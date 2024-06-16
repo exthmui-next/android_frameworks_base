@@ -5800,13 +5800,6 @@ public class PackageManagerService implements PackageSender, TestUtilityService 
                 callingPackage = Integer.toString(Binder.getCallingUid());
             }
 
-            // Don't allow to enable components marked for disabling at build-time
-            if (mDisabledComponentsList.contains(componentName)) {
-                Slog.d(TAG, "Ignoring attempt to set enabled state of disabled component "
-                        + componentName.flattenToString());
-                return;
-            }
-
             setEnabledSettings(List.of(new PackageManager.ComponentEnabledSetting(appPackageName, newState, flags)),
                     userId, callingPackage);
         }
@@ -5941,6 +5934,13 @@ public class PackageManagerService implements PackageSender, TestUtilityService 
             if (!mUserManager.exists(userId)) return;
             if (callingPackage == null) {
                 callingPackage = Integer.toString(Binder.getCallingUid());
+            }
+
+            // Don't allow to enable components marked for disabling at build-time
+            if (mDisabledComponentsList.contains(componentName)) {
+                Slog.d(TAG, "Ignoring attempt to set enabled state of disabled component "
+                        + componentName.flattenToString());
+                return;
             }
 
             // Don't allow to control components forced enabled at build-time
